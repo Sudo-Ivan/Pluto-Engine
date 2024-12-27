@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "graphics.h"
 #include "ecs/entity.h"
+#include "ecs/system.h"
+#include "ecs/render_system.h"
 #include <stdio.h>
 
 #define WINDOW_WIDTH 1280
@@ -39,6 +41,8 @@ int main(void) {
     SetTargetFPS(60);
 
     InitEntityManager();
+    InitSystemManager();
+    InitRenderSystem();
 
     // Create initial game objects
     CreateGameObject((Vector3){ 0, 0, 0 });
@@ -46,6 +50,8 @@ int main(void) {
     CreateGameObject((Vector3){ -2, 0, 0 });
 
     while (!WindowShouldClose()) {
+        UpdateSystems();  // This will call all registered systems
+
         // Update
         if (IsKeyPressed(KEY_SPACE)) {
             CreateGameObject((Vector3){

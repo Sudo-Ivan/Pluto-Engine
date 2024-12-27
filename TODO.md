@@ -3,18 +3,39 @@
 ## Entity Component System (ECS)
 - [x] Core ECS implementation
   - [x] Entity manager
-  - [ ] Component manager
-  - [ ] System manager
-- [ ] Basic components
-  - [ ] Transform component
-  - [ ] Mesh component
-  - [ ] Material component
+  - [x] Component manager (integrated into entity manager)
+  - [x] System manager
+- [x] Basic components
+  - [x] Transform component
+  - [x] Mesh component
+  - [x] Material component
   - [ ] Collision component
-  - [ ] Camera component
+  - [x] Camera component
+- [ ] Component Features
+  - [ ] Component serialization
+  - [ ] Component cloning
+  - [ ] Component dependencies
+  - [ ] Component events/messaging
 - [ ] Basic systems
-  - [ ] Render system
+  - [x] Render system
+    - [x] 3D mesh rendering
+    - [x] 2D shape rendering
+    - [x] Material handling
+    - [x] Camera system integration
   - [ ] Physics system
+    - [ ] Collision detection
+    - [ ] Physics step
+    - [ ] Force application
   - [ ] Input system
+    - [ ] Key mapping
+    - [ ] Mouse/gamepad support
+    - [ ] Input events
+- [ ] ECS Optimizations
+  - [ ] Component pools
+  - [ ] Archetype-based storage
+  - [ ] System execution order
+  - [ ] Query caching
+  - [ ] Parallel system execution
 
 ## Materials System
 - [ ] Material management
@@ -35,13 +56,14 @@
 ## Documentation
 - [ ] API Documentation
   - [x] Entity System API
-  - [ ] Component System API
+  - [x] Component System API
   - [ ] System Manager API
 - [ ] Guides
   - [x] Getting Started
   - [ ] ECS Architecture Guide
-  - [ ] Physics Integration Guide
-- [ ] Examples
+  - [ ] Component Creation Guide
+  - [ ] System Implementation Guide
+- [x] Examples
   - [x] ECS Test
   - [x] 3D Room Demo
   - [x] Splash Screen

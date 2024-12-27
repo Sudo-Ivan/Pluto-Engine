@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "graphics.h"
 #include "ecs/entity.h"
+#include "ecs/system.h"
+#include "ecs/render_system.h"
 #include <stdio.h>
 
 #define WINDOW_WIDTH 1280
@@ -32,30 +34,14 @@ void AddTestComponents(EntityID entity) {
     }
 }
 
-void DrawEntity(EntityID entity) {
-    TransformComponent* transform = GetComponent(entity, COMPONENT_TRANSFORM);
-    MaterialComponent* material = GetComponent(entity, COMPONENT_MATERIAL);
-    
-    if (transform && material) {
-        Vector2 pos = { transform->position.x * 50 + WINDOW_WIDTH/2, 
-                       transform->position.y * 50 + WINDOW_HEIGHT/2 };
-        float rotation = transform->rotation.z;
-        
-        // Draw rotated rectangle
-        Rectangle rect = { pos.x, pos.y, 30 * transform->scale.x, 30 * transform->scale.y };
-        DrawRectanglePro(rect, 
-                        (Vector2){ rect.width/2, rect.height/2 },
-                        rotation,
-                        material->color);
-    }
-}
-
 int main(void) {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "ECS Test");
     SetupGraphics();
     SetTargetFPS(60);
 
     InitEntityManager();
+    InitSystemManager();
+    InitRenderSystem();
 
     // Create initial test entities
     for (int i = 0; i < 5; i++) {
@@ -76,7 +62,6 @@ int main(void) {
         }
 
         if (IsKeyPressed(KEY_D)) {
-            // Find last created entity and destroy it
             EntityManager* em = GetEntityManager();
             for (int i = MAX_ENTITIES-1; i >= 0; i--) {
                 if (em->active[i]) {
@@ -87,19 +72,13 @@ int main(void) {
             }
         }
 
-        // Draw
         BeginDrawing();
             ClearBackground(BLACK);
             
-            // Draw all entities
-            EntityManager* em = GetEntityManager();
-            for (uint32_t i = 0; i < MAX_ENTITIES; i++) {
-                if (em->active[i]) {
-                    DrawEntity(em->entities[i]);
-                }
-            }
+            // Update all systems (including render)
+            UpdateSystems();
 
-            // Debug info
+            // Debug info overlay
             DrawRectangle(0, 0, 300, 160, Fade(BLACK, 0.8f));
             DrawFPS(10, 10);
             DrawText("Controls:", 10, 30, 20, WHITE);
@@ -108,12 +87,12 @@ int main(void) {
             DrawText("Each entity has:", 10, 90, 20, WHITE);
             DrawText("- Transform (position, rotation)", 20, 110, 20, WHITE);
             DrawText("- Material (color)", 20, 130, 20, WHITE);
-            DrawText(TextFormat("Entity count: %d", em->count), 
+            DrawText(TextFormat("Entity count: %d", GetEntityManager()->count), 
                     10, 150, 20, WHITE);
-
         EndDrawing();
     }
 
+    ShutdownSystemManager();
     ShutdownEntityManager();
     CloseWindow();
     return 0;
